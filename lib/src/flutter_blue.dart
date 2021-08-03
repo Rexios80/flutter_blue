@@ -73,6 +73,16 @@ class FlutterBlue {
         .then((p) => p.map((d) => BluetoothDevice.fromProto(d)).toList());
   }
 
+  /// Retrieve a list of paired devices
+  /// Currently only implemented on Android
+  Future<List<BluetoothDevice>> get pairedDevices {
+    return _channel
+        .invokeMethod('getPairedDevices')
+        .then((buffer) => protos.ConnectedDevicesResponse.fromBuffer(buffer))
+        .then((p) => p.devices)
+        .then((p) => p.map((d) => BluetoothDevice.fromProto(d)).toList());
+  }
+
   _setLogLevelIfAvailable() async {
     if (await isAvailable) {
       // Send the log level to the underlying platforms.
